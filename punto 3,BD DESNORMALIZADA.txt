@@ -1,0 +1,10 @@
+select distinct(dniCliente),nombreApellidoCliente
+from reparacion
+where dniCliente not in ( select dnicliente
+								from reparacion
+								where tarjetaSecundaria=reparacion.tarjetaReparacion)
+order by dniCliente asc
+
+--			tiempo duracion\tiempo fetch
+--diego			2.246		0.031
+--

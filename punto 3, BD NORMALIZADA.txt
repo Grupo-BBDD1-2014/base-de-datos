@@ -1,0 +1,11 @@
+select distinct(cliente.dniCliente),nombreApellidoCliente
+from cliente inner join reparacion on cliente.dniCliente=reparacion.dniCliente
+where cliente.dniCliente not in ( select cliente.dnicliente
+									from cliente inner join reparacion on cliente.dniCliente=reparacion.dniCliente
+									where cliente.tarjetaSecundaria=reparacion.tarjetaReparacion)
+order by cliente.dniCliente asc
+
+
+--			tiempo duracion\tiempo fetch
+--diego			0.530		0.031
+--
