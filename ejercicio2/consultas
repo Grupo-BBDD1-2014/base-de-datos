@@ -1,0 +1,13 @@
+
+SELECT dniCliente, nombreApellidoCliente, count(dniCliente) as cuantos 
+FROM reparacion_dn.reparacion 
+group by dniCliente 
+order by dniCliente asc;
+
+============================================================================
+
+SELECT dniCliente, nombreApellidoCliente, count(dniCliente) as Cant 
+FROM reparacion.cliente 
+group by dniCliente
+order by dniCliente asc;
+

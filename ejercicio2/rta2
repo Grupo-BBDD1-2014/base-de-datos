@@ -1,0 +1,6 @@
+2) Listar los dni, nombre y apellido de todos los clientes ordenados por dni en forma ascendente. Realice la
+consulta en ambas bases. ¿Qué diferencia nota?
+
+En conclusión, la base de datos desnormalizada tarda más, en promedio las consultas con la base normalizada tardan alrededor de 0.01/0.1 seg
+y las consultas en la base de datos desnormalizada tarda 0,03/0.7 seg (duration/fetch). 
+

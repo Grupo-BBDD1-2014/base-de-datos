@@ -1,9 +1,0 @@
-select distinct(dniCliente),nombreApellidoCliente
-
-from reparacion
-
-order by dniCliente asc
-
---
---			tiempo de duracion	|tiempo de fetch
---diego		1.857		 		 0.063

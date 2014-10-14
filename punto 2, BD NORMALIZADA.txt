@@ -1,8 +1,0 @@
-select dniCliente,nombreApellidoCliente
-
-from cliente
-
-order by dniCliente asc
---
---  	tiempo de duracion	|tiempo de fetch
---diego	0.0015		  0.078
