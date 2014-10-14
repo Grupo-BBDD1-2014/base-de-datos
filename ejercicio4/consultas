@@ -1,0 +1,23 @@
+VIEW `sucursalesporcliente` AS
+    select 
+        `c`.`dniCliente` AS `dniCliente`,
+        `s`.`codSucursal` AS `codSucursal`
+    from
+        (`cliente` `c`
+        join `sucursal` `s` ON ((`c`.`ciudadCliente` = `s`.`ciudadSucursal`)))
+
+
+=============================================
+
+
+VIEW `sucursalesporcliente` AS
+    select 
+        `r`.`dniCliente` AS `dniCliente`,
+        `r`.`codSucursal` AS `codSucursal`
+    from
+        `reparacion` `r`
+    where
+        (`r`.`ciudadSucursal` = `r`.`ciudadCliente`)
+    group by `r`.`dniCliente` , `r`.`codSucursal`
+
+
