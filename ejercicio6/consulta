@@ -1,0 +1,6 @@
+SELECT C.dniCliente,C.nombreApellidoCliente
+from reparacion.cliente as C inner join reparacion.reparacion as R on C.dniCliente=R.dniCliente
+where C.domicilioCliente=R.direccionReparacionCliente and C.ciudadCliente=R.ciudadReparacionCliente
+group by C.dniCliente
+
+================================================================================================================

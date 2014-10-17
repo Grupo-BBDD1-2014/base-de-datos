@@ -1,0 +1,15 @@
+select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cant
+from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente=R.dniCliente
+where RP.fechaInicioReparacion=R.fechaInicioReparacion
+group by R.dniCliente,R.fechaInicioReparacion,R.fechaInicioReparacion
+having cant>2
+
+
+======================================================================================================================
+
+select distinct(R.dniCliente),R.codSucursal,R.fechaInicioReparacion,count(*) as cant
+from reparacion_dn.reparacion as R
+group by R.dniCliente,R.fechaInicioReparacion,R.codSucursal
+having cant>2
+
+-- verificar funcionamiento... no creo qeu ande bien
