@@ -7,9 +7,12 @@ having cant>2
 
 ======================================================================================================================
 
-select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cant
-from reparacion_dn.reparacion as R
-group by R.dniCliente,R.fechaInicioReparacion,R.codSucursal
-having cant>2
-
--- verificar funcionamiento... no creo qeu ande bien
+select dniCliente, fechaInicioReparacion, count(*) as cantRepuestos
+from 
+(
+	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion
+	from repacion_dn.reparacion as r1
+	where r1.dniCliente = 1000000
+	group by dniCliente, repuestoReparacion
+) as r
+group by r.fechaInicioReparacion
