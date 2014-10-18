@@ -1,0 +1,17 @@
+rta 5b
+
+select distinct r.dniCliente, r.ciudadReparacionCliente
+from reparacion.reparacion as r
+where not exists
+(
+	select v.codSucursal
+	from reparacion.sucursalesporcliente as v
+	where r.dniCliente = v.dniCliente and not exists
+	(
+		select *
+		from reparacion.reparacion as r1
+		where r1.dniCliente = r.dniCliente
+		and r1.fechaInicioReparacion = r.fechaInicioReparacion 
+		and r1.codSucursal = v.codSucursal
+	)
+)

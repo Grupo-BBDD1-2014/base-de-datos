@@ -11,4 +11,6 @@ se necesitó hacer un choque de tablas, pero para no repetir informacion decidim
 debido a la cantidad de entradas que poseia la tabla reparacion.
 
 Para realizar la vista en la base normalizada, no fue problema con un join.
+agregamos que muestre a todos los Clientes (dni) aunque no tengan sucursalesen su ciudad. 
+Esto para realizar la consulta del punto 5.
 

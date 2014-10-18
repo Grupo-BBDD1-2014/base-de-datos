@@ -4,3 +4,9 @@ where C.domicilioCliente=R.direccionReparacionCliente and C.ciudadCliente=R.ciud
 group by C.dniCliente
 
 ================================================================================================================
+
+select r.dniCliente
+from reparacion_dn.reparacion as r
+where r.domicilioCliente = r.direccionReparacionCliente 
+	and r.ciudadCliente = r.ciudadReparacionCliente
+group by r.dniCliente

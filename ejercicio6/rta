@@ -1,1 +1,7 @@
-duracion = 0.090
+6) Hallar los clientes que en alguna de sus reparaciones hayan dejado como dato de contacto el mismo domicilio y
+ciudad que figura en su DNI. Realice la consulta en ambas bases.
+
+"tienen al menos una reparacion realizada en su ultimo domicilio"
+
+
+

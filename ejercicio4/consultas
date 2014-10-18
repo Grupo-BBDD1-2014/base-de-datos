@@ -15,16 +15,13 @@ VIEW `clientevista` AS
         `reparacion` `r`
     group by `r`.`dniCliente`
 
-
-VIEW `sucursalesporclientes` AS
+VIEW `sucursalesporcliente` AS
     select 
-        `cv`.`dniCliente` AS `dniCliente`,
-        `sv`.`codSucursal` AS `codSucursal`
+        `cliente`.`dniCliente` AS `dniCliente`,
+        `sucursal`.`codSucursal` AS `codSucursal`
     from
-        (`clientevista` `cv`
-        join `sucursalvista` `sv`)
-    where
-        (`cv`.`ciudadCliente` = `sv`.`ciudadSucursal`)
+        (`cliente`
+        left join `sucursal` ON ((`cliente`.`ciudadCliente` = `sucursal`.`ciudadSucursal`)))
 
 
 =============================================

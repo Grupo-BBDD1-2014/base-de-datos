@@ -1,7 +1,7 @@
 select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cant
 from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente=R.dniCliente
 where RP.fechaInicioReparacion=R.fechaInicioReparacion
-group by R.dniCliente,R.fechaInicioReparacion,R.fechaInicioReparacion
+group by R.dniCliente,R.fechaInicioReparacion
 having cant>2
 
 

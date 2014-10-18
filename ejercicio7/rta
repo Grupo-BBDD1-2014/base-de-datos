@@ -1,1 +1,3 @@
- la consulta en la BD normalizada tarda 0.09, la consulta en la base de datos desnormalizadas 0.9 
+7) Para aquellas reparaciones que tengan registrados mas de 3 repuestos, listar el DNI del cliente, el código de
+sucursal, la fecha de reparación y la cantidad de repuestos utilizados. Realice la consulta en ambas bases.
+
