@@ -5,10 +5,14 @@ Realice la vista en ambas bases.
 
 Las vistas nos devuelven distintos datos. Probamos con las siguientes consultas:
 
-SELECT R.dniCliente, R.ciudadCliente, R.ciudadSucursal FROM reparacion_dn.reparacion as R where R.dniCliente = 1001927;
+SELECT r.dniCliente, r.ciudadReparacionCliente, r.codSucursal 
+FROM reparacion as r  
+where r.dniCliente = 1001927;
 
 y 
 
-SELECT C.dniCliente, C.ciudadCliente, S.ciudadSucursal FROM reparacion.cliente as C , reparacion.sucursal as S where C.dniCliente = 1001927 and C.ciudadCliente = S.ciudadSucursal;
+SELECT R.dniCliente, R.ciudadCliente, R.codSucursal
+FROM reparacion_dn.reparacion as R 
+where R.dniCliente = 1001927;
 
-y nos devuelven distintos datos.
+SON equivalentes
