@@ -3,16 +3,12 @@ de los clientes y los códigos de sucursales de
 la ciudad donde vive el cliente. 
 Realice la vista en ambas bases.
 
-Las vistas nos devuelven distintos datos. Probamos con las siguientes consultas:
+Para realizar la vista de la base desnormalizada se implementaron 2 vistas que contenian
+1.las sucursales
+2.los clientes.
+Se realizo de esta manera porque la tabla reparacion contenia las reparaciones por clientes, 
+se necesitó hacer un choque de tablas, pero para no repetir informacion decidimos realizar estas vistas, 
+debido a la cantidad de entradas que poseia la tabla reparacion.
 
-SELECT r.dniCliente, r.ciudadReparacionCliente, r.codSucursal 
-FROM reparacion as r  
-where r.dniCliente = 1001927;
+Para realizar la vista en la base normalizada, no fue problema con un join.
 
-y 
-
-SELECT R.dniCliente, R.ciudadCliente, R.codSucursal
-FROM reparacion_dn.reparacion as R 
-where R.dniCliente = 1001927;
-
-SON equivalentes

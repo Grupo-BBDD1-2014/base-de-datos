@@ -1,0 +1,44 @@
+rta 5.a
+Las consultas que realizamos fueron:
+==========================================
+select distinct r.dniCliente
+from reparacion.reparacion as r
+where not exists 
+(
+	select s.codSucursal
+	from reparacion.sucursal as s right join reparacion.cliente as c on s.ciudadSucursal = c.ciudadCliente
+	where r.dniCliente = c.dniCliente and not exists
+	(
+		select r.codSucursal
+		from reparacion.reparacion as r1
+		where r1.dniCliente = r.dniCliente 
+		and r1.fechaInicioReparacion = r.fechaInicioReparacion 
+		and	r1.codSucursal = s.codSucursal
+	)
+)
+=========================================
+
+Comprobamos que no nos devuelva ningun cliente sin sucursal (intersect)
+
+select distinct c1.dnicliente
+from reparacion.cliente as c1
+where c1.dniCliente not in (
+select c1.dnicliente
+from reparacion.sucursal as s1
+where s1.ciudadSucursal = c1.ciudadCliente
+) and c1.dniCliente in
+(select distinct r.dniCliente
+from reparacion.reparacion as r
+where not exists 
+(
+	select s.codSucursal
+	from reparacion.sucursal as s right join reparacion.cliente as c on s.ciudadSucursal = c.ciudadCliente
+	where r.dniCliente = c.dniCliente and not exists
+	(
+		select r.codSucursal
+		from reparacion.reparacion as r1
+		where r1.dniCliente = r.dniCliente 
+		and r1.fechaInicioReparacion = r.fechaInicioReparacion 
+		and	r1.codSucursal = s.codSucursal
+	)
+))

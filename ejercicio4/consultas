@@ -1,26 +1,41 @@
-VIEW `sucursalesPorCliente` AS
+VIEW `sucursalvista` AS
     select 
-        `c`.`ciudadCliente` AS `ciudadcliente`,
-        `s`.`ciudadSucursal` AS `ciudadSucursal`,
-        `c`.`dniCliente` AS `dniCliente`,
-        `s`.`codSucursal` AS `codSucursal`
+        `r`.`codSucursal` AS `codSucursal`,
+        `r`.`ciudadSucursal` AS `ciudadSucursal`
     from
-        (`cliente` `c`
-        join `sucursal` `s` ON ((`c`.`ciudadCliente` = `s`.`ciudadSucursal`)))
+        `reparacion` `r`
+    group by `r`.`codSucursal`
+
+
+VIEW `clientevista` AS
+    select 
+        `r`.`dniCliente` AS `dniCliente`,
+        `r`.`ciudadCliente` AS `ciudadCliente`
+    from
+        `reparacion` `r`
+    group by `r`.`dniCliente`
+
+
+VIEW `sucursalesporclientes` AS
+    select 
+        `cv`.`dniCliente` AS `dniCliente`,
+        `sv`.`codSucursal` AS `codSucursal`
+    from
+        (`clientevista` `cv`
+        join `sucursalvista` `sv`)
+    where
+        (`cv`.`ciudadCliente` = `sv`.`ciudadSucursal`)
 
 
 =============================================
 
 
-VIEW `sucursalesPorCliente` AS
+VIEW `reparacion`.`sucursalesporcliente` AS
     select 
-        `r1`.`dniCliente` AS `dniCliente`,
-        `r2`.`ciudadSucursal` AS `ciudadSucursal`,
-        `r1`.`ciudadCliente` AS `ciudadCliente`,
-        `r2`.`codSucursal` AS `codSucursal`
+        `reparacion`.`cliente`.`dniCliente` AS `dniCliente`,
+        `reparacion`.`sucursal`.`codSucursal` AS `codSucursal`
     from
-        (`reparacion` `r1`
-        join `reparacion` `r2` ON ((`r2`.`ciudadSucursal` = `r1`.`ciudadCliente`)))
-    group by `r1`.`dniCliente` , `r2`.`codSucursal`
+        (`reparacion`.`cliente`
+        join `reparacion`.`sucursal` ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
 
 
