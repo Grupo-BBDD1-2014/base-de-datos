@@ -1,0 +1,52 @@
+15) A continuación se muestran las sentencias necesarias para visualizar el plan de ejecución de ciertas consultas sobre la base de datos normalizada - reparacion. 
+El objetivo es que luego de correr los scripts dados, usted
+analice los resultados y escriba las conclusiones a las que llega.
+
+Luego, crear los siguientes índices:
+create index idx_m2 on sucursal(m2);
+create index idx_er on revisionreparacion(empleadoreparacion);
+create index idx_ciu_suc on sucursal(ciudadsucursal);
+Una vez creados los índices ejecutar nuevamente los planes 1-2-3 y guardar los resultados a archivo
+Para cada plan, determinar cual es la consulta involucrada
+Realizar un análisis comparativo de cada plan con y sin índices, indicando donde cree que incide la
+incorporación del índice en relación a la variación en el plan de ejecución.
+Para cada análisis elaborar una conclusión.
+
+Plan 1)
+explain extended
+select count(r.dniCliente)
+from reparacion r, cliente c, sucursal s, revisionreparacion rv
+where r.dnicliente=c.dnicliente
+and r.codsucursal=s.codsucursal
+and r.dnicliente=rv.dnicliente
+and r.fechainicioreparacion=rv.fechainicioreparacion
+and empleadoreparacion = 'Maidana'
+and s.m2<200
+and s.ciudadsucursal=La Plata';
+
+Plan2)
+explain extended
+select r.*
+from reparacion r, cliente c, sucursal s, revisionreparacion rv
+where r.dnicliente=c.dniCliente
+and r.codsucursal=s.codsucursal
+and r.dnicliente=rv.dnicliente
+and r.fechainicioreparacion=rv.fechainicioreparacion
+and empleadoreparacion = 'Sosa'
+and s.m2>80
+and s.ciudadsucursal='Vicente Lopez'
+and r.fechainicioreparacion between '2006-01-01' and '2013-12-31'
+;
+
+Plan 3)
+explain extended
+select r.*
+from reparacion r, cliente c, revisionreparacion rv,
+(select codsucursal from sucursal where ciudadsucursal='Vicente Lopez' and m2>100)
+s
+where r.dnicliente=c.dnicliente
+and r.codsucursal=s.codsucursal
+and r.dnicliente=rv.dnicliente
+and r.fechainicioreparacion=rv.fechainicioreparacion
+and empleadoreparacion = 'Dominguez'
+and r.fechainicioreparacion between '2006-01-01' and '2013-12-31';

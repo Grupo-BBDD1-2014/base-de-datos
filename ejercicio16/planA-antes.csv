@@ -1,0 +1,2 @@
+id,select_type,table,type,possible_keys,key,key_len,ref,rows,filtered,Extra
+1,SIMPLE,r,ALL,NULL,NULL,NULL,NULL,161174,100.00,"Using where"

@@ -1,0 +1,6 @@
+id,select_type,table,type,possible_keys,key,key_len,ref,rows,filtered,Extra
+1,PRIMARY,c,index,PRIMARY,PRIMARY,4,NULL,20020,100.00,"Using index"
+1,PRIMARY,r,ref,PRIMARY,PRIMARY,4,reparacion.c.dniCliente,1,100.00,"Using where"
+1,PRIMARY,rv,eq_ref,PRIMARY,PRIMARY,101,"reparacion.c.dniCliente,reparacion.r.fechaInicioReparacion,const",1,100.00,"Using where; Using index"
+1,PRIMARY,<derived2>,ALL,NULL,NULL,NULL,NULL,2,100.00,"Using where; Using join buffer (Block Nested Loop)"
+2,DERIVED,sucursal,ref,idx_ciu_suc,idx_ciu_suc,138,const,2,100.00,"Using index condition; Using where"

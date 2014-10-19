@@ -10,6 +10,7 @@ Ejecute el stored procedure.
 
 DUDAS: quien es el usuario?
 que es la fecha? de consulta?
+Porque hacer esto?, hay que reutilizra el SP del siguiente punto? 
 
 ===========================================================================
 DELIMITER $$
