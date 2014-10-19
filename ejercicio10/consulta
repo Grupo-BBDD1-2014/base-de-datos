@@ -1,0 +1,54 @@
+10) Crear un trigger de modo que al insertar un dato en la tabla REPARACION, se actualice la cantidad de
+reparaciones del cliente, la fecha de actualización y el usuario responsable de la misma (actualiza la tabla
+REPARACIONESPORCLIENTE)
+
+Sigo teniendo la misma duda con la fecha y el usuario.
+
+
+
+
+=================================
+
+Delimiter $$ 
+create trigger nueva_reparacion 
+	after insert on reparacion
+	for each row begin
+		
+		call agregar_reparacionesporcliente(NEW.dniCliente);
+	
+	end$$
+
+delimiter ; 
+
+====================================
+
+DELIMITER $$
+
+CREATE DEFINER=`reparacion`@`localhost` PROCEDURE `agregar_reparacionesporcliente`(
+in dniClienteVar int(11)
+)
+BEGIN
+
+	declare idActual int(11) default 0;
+
+	set idActual = (select idRC
+			from reparacionesporcliente
+			where dniCliente = dniClienteVar);
+	
+	if (idActual > 0) THEN
+		update reparacionesporcliente set cantidadReparaciones = cantidadReparaciones + 1, usuario = current_user(), fechaUltimaActualizacion = NOW()
+		where idRC = idActual;
+	ELSE
+		insert into reparacionesporcliente values (null, dniClienteVar,1, NOW(), current_user());
+	END IF;	
+
+END
+
+======================================
+
+
+insert into reparacion values (101,1000000,now(),1,12345,"asdf","asdf",null)
+
+=======================
+
+
