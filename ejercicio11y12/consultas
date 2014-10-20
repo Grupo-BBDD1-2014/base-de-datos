@@ -1,0 +1,23 @@
+11) Crear un stored procedure que sirva para agregar una reparación, junto con una revisión de un empleado
+(REVISIONREPARACION) y un repuesto (REPUESTOREPARACION) relacionados dentro de una sola
+transacción. El stored procedure debe recibir los siguientes parámetros: dniCliente, codSucursal,
+fechaReparacion, cantDiasReparacion, telefonoReparacion, empleadoReparacion, repuestoReparacion.
+
+Como hacer si un repuesto tiene 2 emppleados para reparacion(revisionreparacion).
+por ejemplo :
+call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)
+call store_(1009443,100,2013-12-14 12:20:31,‘Juan’,‘bomba de combustible’,4,4243-4255)
+
+o en el caso de que un cliente tenga 2 repuetsos, y 2 empleados para reparacion, serian la combinacion de todos ellos y llamar al SP
+
+
+12) Ejecutar el stored procedure del punto 11 con los siguientes datos:
+dniCliente: 1009443
+codSucursal: 100
+fechaReparacion: 2013-12-14 12:20:31
+empleadoReparacion: ‘Maidana’
+repuestoReparacion: ‘bomba de combustible’
+cantDiasReparacion: 4
+telefonoReparacion: 4243-4255
+
+call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)

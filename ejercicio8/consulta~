@@ -1,7 +1,0 @@
-CREATE TABLE `reparacion`.`reparacionesporcliente` (
-  `idRC` INT(11) NOT NULL AUTO_INCREMENT,
-  `dniCliente` INT(11) NULL,
-  `cantidadReparaciones` INT(11) NULL,
-  `fechaultimaacualizacion` DATETIME NULL,
-  `usuario` CHAR(16) NULL,
-  PRIMARY KEY (`idRC`));
