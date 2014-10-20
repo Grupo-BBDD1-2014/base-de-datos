@@ -1,10 +1,40 @@
-VIEW `sucursalvista` AS
-    select 
+============================================
+para denormalizada
+
+select c.dniCliente, s.codSucursal, c.ciudadCliente
+from 
+ (select 
         `r`.`codSucursal` AS `codSucursal`,
         `r`.`ciudadSucursal` AS `ciudadSucursal`
     from
         `reparacion` `r`
-    group by `r`.`codSucursal`
+    group by `r`.`codSucursal`) as s
+right join 
+( select 
+        `r`.`dniCliente` AS `dniCliente`,
+        `r`.`ciudadCliente` AS `ciudadCliente`
+    from
+        `reparacion` `r`
+    group by `r`.`dniCliente`) as c on c.ciudadCliente = s.ciudadSucursal
+
+===============o utilizando las vistas==============
+
+select c.dniCliente, s.codSucursal, c.ciudadCliente
+from  sucursalvista as s right join clientevista as c 
+on c.ciudadCliente = s.ciudadSucursal
+
+===============================================
+
+
+esto es para las consultas con reparacion_dn
+
+VIEW `sucursalvista` AS
+    (select 
+        `r`.`codSucursal` AS `codSucursal`,
+        `r`.`ciudadSucursal` AS `ciudadSucursal`
+    from
+        `reparacion` `r` 
+    group by `r`.`codSucursal`)
 
 
 VIEW `clientevista` AS
@@ -15,17 +45,23 @@ VIEW `clientevista` AS
         `reparacion` `r`
     group by `r`.`dniCliente`
 
+
+
+
+
+/* no nos sale esta. */
 VIEW `sucursalesporcliente` AS
-    select 
-        `cliente`.`dniCliente` AS `dniCliente`,
-        `sucursal`.`codSucursal` AS `codSucursal`
+    select distinct
+        `c`.`dniCliente` AS `dniCliente`,
+        `s`.`codSucursal` AS `codSucursal`,
+        `c`.`ciudadCliente` AS `ciudadCliente`
     from
-        (`cliente`
-        left join `sucursal` ON ((`cliente`.`ciudadCliente` = `sucursal`.`ciudadSucursal`)))
+        (`clientevista` `c`
+        left join `sucursalvista` `s` ON ((`c`.`ciudadCliente` = `s`.`ciudadSucursal`)))
 
 
 =============================================
-
+esta es la vista para la otra. 
 
 VIEW `reparacion`.`sucursalesporcliente` AS
     select 
@@ -33,6 +69,6 @@ VIEW `reparacion`.`sucursalesporcliente` AS
         `reparacion`.`sucursal`.`codSucursal` AS `codSucursal`
     from
         (`reparacion`.`cliente`
-        join `reparacion`.`sucursal` ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
+        left join `reparacion`.`sucursal` ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
 
-
+=================================================
