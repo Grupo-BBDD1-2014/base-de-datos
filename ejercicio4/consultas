@@ -72,3 +72,10 @@ VIEW `reparacion`.`sucursalesporcliente` AS
         left join `reparacion`.`sucursal` ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
 
 =================================================
+SELECT R.dniCliente,R.codSucursal,R.ciudadCliente, R.ciudadSucursal 
+FROM reparacion_dn.reparacion as R 
+where R.ciudadSucursal=r.ciudadCliente
+group by  dniCliente, codSucursal
+order by dniCliente asc
+
+-- ESTA ES LA QUE VA COMO RESPUESTA!!!!!!
