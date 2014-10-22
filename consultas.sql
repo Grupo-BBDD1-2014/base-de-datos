@@ -391,7 +391,7 @@ delimiter ;
 *
 */
 DELIMITER $$
-CREATE PROCEDURE `revision_repuesto`(
+create PROCEDURE `revision_repuesto`(
 	in P_dniCliente int(11),
 	in P_codSucursal int(11), 
 	in P_fechaReparacion datetime, 
@@ -404,25 +404,34 @@ BEGIN
 	declare dir varchar(255);
 	declare ciudad varchar(255);
 	declare tarjeta varchar(255);
-	select C.domicioleCliente,C.ciuedadCliente,C.tarjetaPrimaria into @dir,@ciudad,@tarjeta 
+	/* verificar que hace esto */
+	select C.domicilioCliente,C.ciudadCliente,C.tarjetaPrimaria into @dir,@ciudad,@tarjeta 
 	from reparacion.cliente as C 
 	where C.dniCliente=P_dnicliente;
-	-- faltan parametros: direccionreparacioncliente,ciudad reparacionclientes (conseguibles mediante consulta)
-	-- pero tarjeta de reparacion debe recibirse como parametro, con cual pagaria llegado el caso
+	
+
 	start transaction;
 		insert into reparacion.reparacion (`codSucursal`,`dniCliente`,`fechaInicioReparacion`, `cantDiasReparacion`,
 		 `telefonoReparacionCliente`, `direccionReparacionCliente`, `ciudadReparacionCliente`, `tarjetaReparacion`) 
-		values (P_codSucursal,dnicliente,P_fechaReparacion,P_cantDiasReparacion,
-		P_telefonoReparacion,dir,ciudad,tarjeta);
+		values (P_codSucursal, P_dnicliente, P_fechaReparacion, P_cantDiasReparacion,
+		P_telefonoReparacion, dir, ciudad, tarjeta);
 
-		insert into reparacion.repuestoreparacion (`dniCliente`,`fechaInicioReparacion`,`repuestoReparacion`)
-		values (P_dniCliente,P_fechaReparacion,P_repuestoReparacion);
+		insert into reparacion.repuestoreparacion (`dniCliente`, `fechaInicioReparacion`, `repuestoReparacion`)
+		values (P_dniCliente, P_fechaReparacion, P_repuestoReparacion);
 
-		insert into reparacion.revisionreparacion (`dniCliente`,`fechaInicioReparacion`,`empleadoReparacion`) 
-		values (P_dniCliente,P_fechaReparacion,P_empleadoReparacion);
+		insert into reparacion.revisionreparacion (`dniCliente`, `fechaInicioReparacion`, `empleadoReparacion`) 
+		values (P_dniCliente, P_fechaReparacion, P_empleadoReparacion);
 	commit; 
 END $$
 Delimiter ;
+
+/*
+	Se tuvo en cuenta: 
+		->Deberia tener tarjeta con la que el usuario paga(tarjetareparacion). Deberia recibirse como parametro.
+		Nosotros hacemos una consulta y ponemos la tarjeta primaria.
+		->La direccion y ciudad de reparacion son la direccion y ciudad actual del cliente.
+
+*/
 
 -- ====================================================================================
 
@@ -437,6 +446,6 @@ Delimiter ;
 * telefonoReparacion: 4243-4255
 */
 
-call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)
+call revision_repuesto(1009443,100, 2013-12-14 12:20:31 , 4 ,4243-4255, 'Maidana','bomba de combustible')
 
 -- ====================================================================================
