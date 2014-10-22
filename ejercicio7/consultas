@@ -1,4 +1,4 @@
-select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cant
+select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cantRepuestos
 from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente=R.dniCliente
 where RP.fechaInicioReparacion=R.fechaInicioReparacion
 group by R.dniCliente,R.fechaInicioReparacion
@@ -9,10 +9,10 @@ having cant>2
 
 select dniCliente, fechaInicioReparacion, count(*) as cantRepuestos
 from 
-(
-	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion
-	from repacion_dn.reparacion as r1
-	where r1.dniCliente = 1000000
-	group by dniCliente, repuestoReparacion
+(	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion
+	from reparacion_dn.reparacion as r1
+	group by r1.dniCliente, fechaInicioReparacion,  r1.repuestoReparacion
 ) as r
-group by r.fechaInicioReparacion
+group by dniCliente, fechaInicioReparacion
+having cantRepuestos > 2
+
