@@ -1,18 +1,28 @@
+Base Normalizada
+
 select dniCliente, nombreApellidoCliente
 from reparacion.cliente as C
-where dniCliente not in ( select C.dniCliente
-								from reparacion.reparacion as R
-								where C.dniCliente=R.dniCliente and C.tarjetaSecundaria=R.tarjetaReparacion)
+where dniCliente not in 
+( 
+	select C.dniCliente
+	from reparacion.reparacion as R
+	where C.dniCliente=R.dniCliente 
+	and C.tarjetaSecundaria=R.tarjetaReparacion
+)
 order by C.dniCliente asc
 
-===========================================================================================
 
+===========================================================================================
+Base sin Normalizar
 
 select dniCliente, nombreApellidoCliente
 from reparacion_dn.reparacion as R
-where R.dniCliente not in ( select dniCliente
-								from reparacion_dn.reparacion as G
-								where R.tarjetaSecundaria=G.tarjetaReparacion)
+where R.dniCliente not in 
+( 
+	select dniCliente
+	from reparacion_dn.reparacion as G
+	where R.tarjetaSecundaria=G.tarjetaReparacion
+)
 group by dniCliente
 order by dniCliente asc
 

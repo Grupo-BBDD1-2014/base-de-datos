@@ -1,6 +1,6 @@
 rta 5b
 
-select distinct r.dniCliente, r.ciudadReparacionCliente
+select distinct r.dniCliente
 from reparacion.reparacion as r
 where not exists
 (
@@ -15,3 +15,4 @@ where not exists
 		and r1.codSucursal = v.codSucursal
 	)
 )
+
