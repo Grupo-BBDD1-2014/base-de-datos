@@ -463,6 +463,9 @@ Delimiter ;
 		si se llama nuevamente al SP, con los datos que son clave en reparacion (dniCliente y fechaInicioReparacion),
 		genera un error de clave duplicada.
 		
+	-->Lo otro que se puede hacer, es como se utiliza el archivo de insersiones.sql provisto por la catedra<--
+
+		
 */
 
 -- ====================================================================================
@@ -481,3 +484,16 @@ Delimiter ;
 call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Maidana','bomba de combustible')
 
 -- ====================================================================================
+
+/*
+* 13) Realizar las inserciones provistas en el archivo inserciones.sql.
+*/
+
+-- ====================================================================================
+/*
+* 14) Validar mediante una consulta que la tabla REPARACIONESPORCLIENTE se este actualizando correctamente
+*/
+
+-- ====================================================================================
+
+
