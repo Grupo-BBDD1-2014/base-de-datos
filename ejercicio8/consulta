@@ -1,7 +1,7 @@
 CREATE TABLE `reparacion`.`reparacionesporcliente` (
   `idRC` INT(11) NOT NULL AUTO_INCREMENT,
-  `dniCliente` INT(11) NULL,
-  `cantidadReparaciones` INT(11) NULL,
-  `fechaUltimaActualizacion` DATETIME NULL,
-  `usuario` CHAR(16) NULL,
+  `dniCliente` INT(11) NOT NULL,
+  `cantidadReparaciones` INT(11) NOT NULL,
+  `fechaUltimaActualizacion` DATETIME NOT NULL,
+  `usuario` CHAR(16) NOT NULL,
   PRIMARY KEY (`idRC`));

@@ -1,18 +1,21 @@
-select R.dniCliente,R.codSucursal,R.fechaInicioReparacion,count(*) as cantRepuestos
-from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente=R.dniCliente
-where RP.fechaInicioReparacion=R.fechaInicioReparacion
-group by R.dniCliente,R.fechaInicioReparacion
-having cant>2
+base normalizada 
+
+select R.dniCliente, R.codSucursal, R.fechaInicioReparacion,count(*) as cantRepuestos
+from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente = R.dniCliente
+where RP.fechaInicioReparacion = R.fechaInicioReparacion
+group by R.dniCliente, R.fechaInicioReparacion
+having cantRepuestos > 2
 
 
 ======================================================================================================================
+Base desnormalizada
 
-select dniCliente, fechaInicioReparacion, count(*) as cantRepuestos
+
+select dniCliente, codSucursal, fechaInicioReparacion, count(*) as cantRepuestos
 from 
-(	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion
+(	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion, codSucursal
 	from reparacion_dn.reparacion as r1
 	group by r1.dniCliente, fechaInicioReparacion,  r1.repuestoReparacion
 ) as r
 group by dniCliente, fechaInicioReparacion
 having cantRepuestos > 2
-

@@ -212,43 +212,66 @@ group by C.dniCliente
 	en la base sin normalizar. Esto se debe a que existe demasiada informacion repetida en la base sin normalizar, 
 	debe recorrer todas las filas. 
 	Si sacamos el group by, la consulta normalizada nos da 30000 row aprox, y la consulta desnormalizada nos da 130000.
-	
+
 */
 -- =========================================================================
 
 /*
-* 6) Hallar los clientes que en alguna de sus reparaciones hayan dejado como dato de contacto el mismo domicilio y
-* ciudad que figura en su DNI. Realice la consulta en ambas bases.
-*
-* Nosotros interpretamos la consulta como : "tienen al menos una reparacion realizada en su ultimo domicilio"
-*
-* Es decir que direccionCliente y direccionReparacionCliente son la misma.
-* Pueden ser distintas en el caso de que el cliente se haya mudado alguna vez.
+* 7) Para aquellas reparaciones que tengan registrados mas de 3 repuestos, listar el DNI del cliente, el código de
+* sucursal, la fecha de reparación y la cantidad de repuestos utilizados. Realice la consulta en ambas bases.
 *
 */
 
 -- Denormalizada
 
-select r.dniCliente
-from reparacion_dn.reparacion as r
-where r.domicilioCliente = r.direccionReparacionCliente 
-	and r.ciudadCliente = r.ciudadReparacionCliente
-group by r.dniCliente
+select dniCliente, codSucursal, fechaInicioReparacion, count(*) as cantRepuestos
+from 
+(	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion, codSucursal
+	from reparacion_dn.reparacion as r1
+	group by r1.dniCliente, fechaInicioReparacion,  r1.repuestoReparacion
+) as r
+group by dniCliente, fechaInicioReparacion
+having cantRepuestos > 2
+
 
 -- =========================================================================
 -- Normalizada
 
-SELECT C.dniCliente, C.nombreApellidoCliente
-from reparacion.cliente as C 
-	inner join reparacion.reparacion as R on C.dniCliente = R.dniCliente
-where C.domicilioCliente = R.direccionReparacionCliente and C.ciudadCliente = R.ciudadReparacionCliente
-group by C.dniCliente
+select R.dniCliente, R.codSucursal, R.fechaInicioReparacion,count(*) as cantRepuestos
+from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente = R.dniCliente
+where RP.fechaInicioReparacion = R.fechaInicioReparacion
+group by R.dniCliente, R.fechaInicioReparacion
+having cantRepuestos > 2
+
 
 /*
-	Estas consultas tienen diferencias en tiempos, aproximadamente el doble de tiempo le costo encontrar
-	en la base sin normalizar. Esto se debe a que existe demasiada informacion repetida en la base sin normalizar, 
-	debe recorrer todas las filas. 
-	Si sacamos el group by, la consulta normalizada nos da 30000 row aprox, y la consulta desnormalizada nos da 130000.
+	En tiempo la base sin normalizar tardo mucho màs. 
+	Aprox. 0.6 frente a 0.07 segundos que tardo la consulta en la base normalizada
 	
+*/
+-- =========================================================================
+
+/*
+* 8) Agregar la siguiente tabla:
+* REPARACIONESPORCLIENTE
+* idRC: int(11) PK AI
+* dniCliente: int(11)
+* cantidadReparaciones: int(11)
+* fechaultimaactualizacion: datetime
+* usuario: char(16)
+*
+*/
+
+CREATE TABLE `reparacion`.`reparacionesporcliente` (
+  `idRC` INT(11) NOT NULL AUTO_INCREMENT,
+  `dniCliente` INT(11) NOT NULL,
+  `cantidadReparaciones` INT(11) NOT NULL,
+  `fechaUltimaActualizacion` DATETIME NOT NULL,
+  `usuario` CHAR(16) NOT NULL,
+  PRIMARY KEY (`idRC`));
+
+/*
+	Los datos de esta tabla no tendrian sentido que alguno fuera null.
+		
 */
 -- =========================================================================
