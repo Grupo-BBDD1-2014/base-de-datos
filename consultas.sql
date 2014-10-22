@@ -294,7 +294,6 @@ CREATE TABLE `reparacion`.`reparacionesporcliente` (
 * 
 */
 
--- Denormalizada
 DELIMITER $$
 
 CREATE PROCEDURE `actualizar_reparacionesporcliente`()
@@ -312,7 +311,6 @@ DECLARE cursor_cliente
 		group by dniCliente;
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
 
 START transaction;
 
@@ -338,3 +336,107 @@ DELIMITER ;
 
 CALL  actualizar_reparacionesporcliente
 -- =========================================================================
+
+/*
+* 10) Crear un trigger de modo que al insertar un dato en la tabla REPARACION, se actualice la cantidad de
+* reparaciones del cliente, la fecha de actualización y el usuario responsable de la misma (actualiza la tabla
+* REPARACIONESPORCLIENTE)
+* 
+*/
+-- =========== Store procedure, solo para que este un poco más ordenado ================
+DELIMITER $$
+
+CREATE DEFINER=`reparacion`@`localhost` PROCEDURE `agregar_reparacionesporcliente`(
+in dniClienteVar int(11)
+)
+BEGIN
+
+	declare idActual int(11) default 0;
+
+	set idActual = (select idRC
+			from reparacionesporcliente
+			where dniCliente = dniClienteVar);
+	
+	if (idActual > 0) THEN
+		update reparacionesporcliente set cantidadReparaciones = cantidadReparaciones + 1, usuario = current_user(), fechaUltimaActualizacion = NOW()
+		where idRC = idActual;
+	ELSE
+		insert into reparacionesporcliente values (null, dniClienteVar,1, NOW(), current_user());
+	END IF;	
+
+END
+
+-- ============================ El trigger pedido =====================================
+
+
+Delimiter $$ 
+create trigger nueva_reparacion 
+	after insert on reparacion
+	for each row begin
+		
+		call agregar_reparacionesporcliente(NEW.dniCliente);
+	
+	end$$
+
+delimiter ;
+
+
+-- ====================================================================================
+
+/*
+* 11) Crear un stored procedure que sirva para agregar una reparación, junto con una revisión de un empleado
+* (REVISIONREPARACION) y un repuesto (REPUESTOREPARACION) relacionados dentro de una sola
+* transacción. El stored procedure debe recibir los siguientes parámetros: dniCliente, codSucursal,
+* fechaReparacion, cantDiasReparacion, telefonoReparacion, empleadoReparacion, repuestoReparacion.
+*
+*/
+DELIMITER $$
+CREATE PROCEDURE `revision_repuesto`(
+	in P_dniCliente int(11),
+	in P_codSucursal int(11), 
+	in P_fechaReparacion datetime, 
+	in P_cantDiasReparacion int(11),
+	in P_telefonoReparacion varchar(45),
+	in P_empleadoReparacion varchar(30),
+	in P_repuestoReparacion varchar(30)
+)
+BEGIN
+	declare dir varchar(255);
+	declare ciudad varchar(255);
+	declare tarjeta varchar(255);
+	select C.domicioleCliente,C.ciuedadCliente,C.tarjetaPrimaria into @dir,@ciudad,@tarjeta 
+	from reparacion.cliente as C 
+	where C.dniCliente=P_dnicliente;
+	-- faltan parametros: direccionreparacioncliente,ciudad reparacionclientes (conseguibles mediante consulta)
+	-- pero tarjeta de reparacion debe recibirse como parametro, con cual pagaria llegado el caso
+	start transaction;
+		insert into reparacion.reparacion (`codSucursal`,`dniCliente`,`fechaInicioReparacion`, `cantDiasReparacion`,
+		 `telefonoReparacionCliente`, `direccionReparacionCliente`, `ciudadReparacionCliente`, `tarjetaReparacion`) 
+		values (P_codSucursal,dnicliente,P_fechaReparacion,P_cantDiasReparacion,
+		P_telefonoReparacion,dir,ciudad,tarjeta);
+
+		insert into reparacion.repuestoreparacion (`dniCliente`,`fechaInicioReparacion`,`repuestoReparacion`)
+		values (P_dniCliente,P_fechaReparacion,P_repuestoReparacion);
+
+		insert into reparacion.revisionreparacion (`dniCliente`,`fechaInicioReparacion`,`empleadoReparacion`) 
+		values (P_dniCliente,P_fechaReparacion,P_empleadoReparacion);
+	commit; 
+END $$
+Delimiter ;
+
+-- ====================================================================================
+
+/*
+* 12) Ejecutar el stored procedure del punto 11 con los siguientes datos:
+* dniCliente: 1009443
+* codSucursal: 100
+* fechaReparacion: 2013-12-14 12:20:31
+* empleadoReparacion: ‘Maidana’
+* repuestoReparacion: ‘bomba de combustible’
+* cantDiasReparacion: 4
+* telefonoReparacion: 4243-4255
+*/
+
+call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)
+
+-- ====================================================================================
