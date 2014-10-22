@@ -20,16 +20,17 @@ BEGIN
 
 DECLARE dni int(11);
 DECLARE cant int(11) default 0;
-DECLARE fecha datetime default current_date();
-DECLARE usuario varchar(16);
+DECLARE fecha datetime default now();
+DECLARE usuario varchar(16) default current_user();
 DECLARE done boolean default false;
 DECLARE cursor_cliente 
 	CURSOR FOR 
-		select dniCliente, count(dniCliente) as cantidadReparaciones, now() as fechaUltimaActualizacion, current_user() as usuario
+		select dniCliente, count(dniCliente) as cantidadReparaciones
 		from reparacion
 		group by dniCliente;
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
 
 START transaction;
 
@@ -42,8 +43,9 @@ START transaction;
 			LEAVE read_loop;
 		END IF;
 
-		insert into reparacionesporcliente values (NULL, dni,cant,fecha,usuario);
+		insert into reparacionesporcliente values (NULL, dni,cant,fecha, usuario);
 
 	end loop;
 COMMIT;
 END
+DELIMITER ; 

@@ -272,6 +272,69 @@ CREATE TABLE `reparacion`.`reparacionesporcliente` (
 
 /*
 	Los datos de esta tabla no tendrian sentido que alguno fuera null.
-		
+
 */
+-- =========================================================================
+
+/*
+* 9) Crear un stored procedure que realice los siguientes pasos dentro de una transacción:
+* 
+* a) Realizar una consulta que para cada cliente (dniCliente), calcule la cantidad de reparaciones que tiene
+* registradas. Registrar la fecha en la que se realiza la consulta y el usuario con el que la realizó.
+* 
+* b) Guardar el resultado de la consulta en un cursor.
+* 
+* c) Iterar el cursor e insertar los valores correspondientes en la tabla REPARACIONESPORCLIENTE.
+*
+* Ejecute el stored procedure.
+
+* Tomamos USUARIO como el usuario que realiza la consulta current_user()
+* Tomamos FECHA como la fecha en la que se realiza la consulta NOW()
+
+* 
+*/
+
+-- Denormalizada
+DELIMITER $$
+
+CREATE PROCEDURE `actualizar_reparacionesporcliente`()
+BEGIN
+
+DECLARE dni int(11);
+DECLARE cant int(11) default 0;
+DECLARE fecha datetime default now();
+DECLARE usuario varchar(16) default current_user();
+DECLARE done boolean default false;
+DECLARE cursor_cliente 
+	CURSOR FOR 
+		select dniCliente, count(dniCliente) as cantidadReparaciones
+		from reparacion
+		group by dniCliente;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+
+START transaction;
+
+	open cursor_cliente;
+	
+	read_loop : loop
+		
+		fetch cursor_cliente into dni, cant, fecha, usuario;
+		IF done THEN
+			LEAVE read_loop;
+		END IF;
+
+		insert into reparacionesporcliente values (NULL, dni,cant,fecha, usuario);
+
+	end loop;
+COMMIT;
+END
+DELIMITER ; 
+
+/*
+	Para llamarlo y que actualice la tabla. (solo deberia hacerse una vez esto).
+*/
+
+CALL  actualizar_reparacionesporcliente
 -- =========================================================================
