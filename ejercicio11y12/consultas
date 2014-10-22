@@ -8,7 +8,7 @@ por ejemplo :
 call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)
 call store_(1009443,100,2013-12-14 12:20:31,‘Juan’,‘bomba de combustible’,4,4243-4255)
 
-o en el caso de que un cliente tenga 2 repuetsos, y 2 empleados para reparacion, serian la combinacion de todos ellos y llamar al SP
+o en el caso de que un cliente tenga 2 repuestos, y 2 empleados para reparacion, serian la combinacion de todos ellos y llamar al SP por cada uno ( 4 llamadas )
 
 DELIMITER $$
 create PROCEDURE `revision_repuesto`(
@@ -25,9 +25,9 @@ BEGIN
 	declare ciudad varchar(255);
 	declare tarjeta varchar(255);
 	/* verificar que hace esto */
-	select C.domicilioCliente,C.ciudadCliente,C.tarjetaPrimaria into @dir,@ciudad,@tarjeta 
+	select C.domicilioCliente, C.ciudadCliente, C.tarjetaPrimaria into dir, ciudad, tarjeta 
 	from reparacion.cliente as C 
-	where C.dniCliente=P_dnicliente;
+	where C.dniCliente = P_dnicliente;
 	
 
 	start transaction;
@@ -45,6 +45,7 @@ BEGIN
 END $$
 Delimiter ;
 
+
 -- ====================================================================================
 
 
@@ -57,4 +58,13 @@ repuestoReparacion: ‘bomba de combustible’
 cantDiasReparacion: 4
 telefonoReparacion: 4243-4255
 
-call store_(1009443,100,2013-12-14 12:20:31,‘Maidana’,‘bomba de combustible’,4,4243-4255)
+call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Maidana','bomba de combustible')
+
+
+Cuando se hacen pruebas, utilizar estos metodos para dejar como estaba. ( si pusimos el trigger del ejer. 10 )
+
+
+delete from reparacion where dniCliente = 1009443 and fechaInicioReparacion = '2013-12-14 12:20:31';
+delete from revisionreparacion where dniCliente = 1009443 and fechaInicioReparacion = '2013-12-14 12:20:31';
+delete from repuestoreparacion where dniCliente = 1009443 and fechaInicioReparacion = '2013-12-14 12:20:31';
+update reparacion.reparacionesporcliente set cantidadReparaciones = 2 where dniCliente = 1009443 and fechaInicioReparacion = '2013-12-14 12:20:31'

@@ -318,7 +318,7 @@ START transaction;
 	
 	read_loop : loop
 		
-		fetch cursor_cliente into dni, cant, fecha, usuario;
+		fetch cursor_cliente into dni, cant;
 		IF done THEN
 			LEAVE read_loop;
 		END IF;
@@ -327,7 +327,7 @@ START transaction;
 
 	end loop;
 COMMIT;
-END
+END$$
 DELIMITER ; 
 
 /*
@@ -346,7 +346,7 @@ CALL  actualizar_reparacionesporcliente
 -- =========== Store procedure, solo para que este un poco más ordenado ================
 DELIMITER $$
 
-CREATE DEFINER=`reparacion`@`localhost` PROCEDURE `agregar_reparacionesporcliente`(
+CREATE PROCEDURE `agregar_reparacionesporcliente`(
 in dniClienteVar int(11)
 )
 BEGIN
@@ -363,8 +363,8 @@ BEGIN
 	ELSE
 		insert into reparacionesporcliente values (null, dniClienteVar,1, NOW(), current_user());
 	END IF;	
-
-END
+END$$
+DELIMITER ;
 
 -- ============================ El trigger pedido =====================================
 
@@ -380,6 +380,31 @@ create trigger nueva_reparacion
 
 delimiter ;
 
+/*
+	Nos pareció un poco màs ordenado delegar en un SP.
+	El problema es que el usuario puede llamar a este SP, y no debería ocurrir.
+	De todas formas, la otra versión (sin SP) Sería la siguiente:
+*/
+Delimiter $$ 
+create trigger nueva_reparacion 
+	after insert on reparacion
+	for each row begin
+		declare dniClienteVar int(11) default NEW.dniCliente;
+		declare idActual int(11) default 0;
+		set idActual = (select idRC
+			from reparacionesporcliente
+			where dniCliente = dniClienteVar);
+		
+		if (idActual > 0) THEN
+			update reparacionesporcliente set cantidadReparaciones = cantidadReparaciones + 1, usuario = current_user(), fechaUltimaActualizacion = NOW()
+			where idRC = idActual;
+		ELSE
+			insert into reparacionesporcliente values (null, dniClienteVar,1, NOW(), current_user());
+		END IF;	
+	
+	end$$
+
+delimiter ;
 
 -- ====================================================================================
 
@@ -405,9 +430,9 @@ BEGIN
 	declare ciudad varchar(255);
 	declare tarjeta varchar(255);
 	/* verificar que hace esto */
-	select C.domicilioCliente,C.ciudadCliente,C.tarjetaPrimaria into @dir,@ciudad,@tarjeta 
+	select C.domicilioCliente, C.ciudadCliente, C.tarjetaPrimaria into dir, ciudad, tarjeta 
 	from reparacion.cliente as C 
-	where C.dniCliente=P_dnicliente;
+	where C.dniCliente = P_dnicliente;
 	
 
 	start transaction;
@@ -424,13 +449,20 @@ BEGIN
 	commit; 
 END $$
 Delimiter ;
-
 /*
 	Se tuvo en cuenta: 
 		->Deberia tener tarjeta con la que el usuario paga(tarjetareparacion). Deberia recibirse como parametro.
 		Nosotros hacemos una consulta y ponemos la tarjeta primaria.
 		->La direccion y ciudad de reparacion son la direccion y ciudad actual del cliente.
+		->Cuando se quieren agregar 2 repuestos para la misma reparacion, habria que hacer dos llamados similares a : 
+	call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,4243-4255, 'Maidana','bomba de combustible')
+	call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,4243-4255, 'Maidana','Repuesto2')
+		Lo mismo ocurrirìa en el caso de que tenga varios usuarios que hayan hecho la revisión.
 
+		Nosotros tomamos en cuenta que el inciso no hace referencia a nada de esto, por lo tanto
+		si se llama nuevamente al SP, con los datos que son clave en reparacion (dniCliente y fechaInicioReparacion),
+		genera un error de clave duplicada.
+		
 */
 
 -- ====================================================================================
@@ -446,6 +478,6 @@ Delimiter ;
 * telefonoReparacion: 4243-4255
 */
 
-call revision_repuesto(1009443,100, 2013-12-14 12:20:31 , 4 ,4243-4255, 'Maidana','bomba de combustible')
+call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Maidana','bomba de combustible')
 
 -- ====================================================================================

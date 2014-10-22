@@ -15,7 +15,7 @@ Porque hacer esto?, hay que reutilizra el SP del siguiente punto?
 ===========================================================================
 DELIMITER $$
 
-CREATE DEFINER=`reparacion`@`localhost` PROCEDURE `actualizar_reparacionesporcliente`()
+CREATE PROCEDURE `actualizar_reparacionesporcliente`()
 BEGIN
 
 DECLARE dni int(11);
@@ -31,14 +31,13 @@ DECLARE cursor_cliente
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-
 START transaction;
 
 	open cursor_cliente;
 	
 	read_loop : loop
 		
-		fetch cursor_cliente into dni, cant, fecha, usuario;
+		fetch cursor_cliente into dni, cant;
 		IF done THEN
 			LEAVE read_loop;
 		END IF;
@@ -47,5 +46,5 @@ START transaction;
 
 	end loop;
 COMMIT;
-END
+END$$
 DELIMITER ; 
