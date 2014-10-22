@@ -487,6 +487,9 @@ call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Mai
 
 /*
 * 13) Realizar las inserciones provistas en el archivo inserciones.sql.
+* Realizamos la importaciòn del archivo al mysql (el botón en forma de carpeta)
+* y luego ejecutamos la consulta completa (ctrl + shift + enter)
+
 */
 
 -- ====================================================================================

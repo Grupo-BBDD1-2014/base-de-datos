@@ -1,2 +1,2 @@
 id,select_type,table,type,possible_keys,key,key_len,ref,rows,filtered,Extra
-1,SIMPLE,r,ref,"idx_dr,idx_ciu_hosp,idx_canthab",idx_dr,92,const,1576,100.00,"Using index condition; Using where"
+1,SIMPLE,r,ref,"idx_canthab,idx_dr,idx_ciu_hosp",idx_dr,92,const,1576,100.00,"Using index condition; Using where"

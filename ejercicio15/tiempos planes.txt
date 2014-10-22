@@ -1,0 +1,12 @@
+			antes	desp
+plan1 -> 	0.043	0.001
+plan2 -> 	0.025	0.001
+plan3 -> 	0.001	0.001
+
+planA ->	0.001	0.001
+planB ->	0.001	0.001
+planC ->	0.001	0.001
+
+Para las consultas sin normalizar, no hay diferencias de tiempos. No se si es mi maquina, o que.
+Para las consultas sobre la base normalizada, se ve un aumento de velocidad. 
+	Luego analizar los indices.

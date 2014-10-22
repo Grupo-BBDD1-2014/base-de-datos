@@ -1,0 +1,23 @@
+-- tabla normalizada
+
+create index idx_m2 on sucursal(m2);
+create index idx_er on revisionreparacion(empleadoreparacion);
+create index idx_ciu_suc on sucursal(ciudadsucursal);
+
+/* Esto es para quitar los index en el caso que se quiera volver a probar. */
+
+drop index idx_m2 on sucursal;
+drop index idx_er on revisionreparacion;
+drop index idx_ciu_suc on sucursal;
+
+-- Base sin normalizar
+
+create index idx_canthab on reparacion(m2);
+create index idx_dr on reparacion(empleadoreparacion);
+create index idx_ciu_hosp on reparacion(ciudadsucursal);
+
+-- Para eliminar los indices en la tabla.
+
+drop index idx_canthab on reparacion;
+drop index idx_dr on reparacion;
+drop index idx_ciu_hosp on reparacion;

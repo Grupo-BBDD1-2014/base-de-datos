@@ -1,5 +1,5 @@
 id,select_type,table,type,possible_keys,key,key_len,ref,rows,filtered,Extra
-1,SIMPLE,c,index,PRIMARY,PRIMARY,4,NULL,20020,100.00,"Using index"
-1,SIMPLE,r,ref,PRIMARY,PRIMARY,4,reparacion.c.dniCliente,1,100.00,"Using where"
-1,SIMPLE,s,eq_ref,"PRIMARY,idx_ciu_suc",PRIMARY,4,reparacion.r.codSucursal,1,100.00,"Using where"
-1,SIMPLE,rv,eq_ref,PRIMARY,PRIMARY,101,"reparacion.c.dniCliente,reparacion.r.fechaInicioReparacion,const",1,100.00,"Using where; Using index"
+1,SIMPLE,s,ref,"PRIMARY,idx_m2,idx_ciu_suc",idx_ciu_suc,138,const,2,100.00,"Using index condition; Using where"
+1,SIMPLE,rv,ref,"PRIMARY,idx_er",idx_er,92,const,708,100.00,"Using where; Using index"
+1,SIMPLE,c,eq_ref,PRIMARY,PRIMARY,4,reparacion.rv.dniCliente,1,100.00,"Using index"
+1,SIMPLE,r,eq_ref,PRIMARY,PRIMARY,9,"reparacion.rv.dniCliente,reparacion.rv.fechaInicioReparacion",1,100.00,"Using where"
