@@ -1,3 +1,4 @@
+Tabla desnormalizada
 
 SELECT dniCliente, nombreApellidoCliente, count(dniCliente) as cuantos 
 FROM reparacion_dn.reparacion 
@@ -5,6 +6,7 @@ group by dniCliente
 order by dniCliente asc;
 
 ============================================================================
+Tabla normalizada 
 
 SELECT dniCliente, nombreApellidoCliente, count(dniCliente) as Cant 
 FROM reparacion.cliente 
