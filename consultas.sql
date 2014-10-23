@@ -496,7 +496,9 @@ call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Mai
 /*
 * 14) Validar mediante una consulta que la tabla REPARACIONESPORCLIENTE se este actualizando correctamente
 */
+select row_count() from reparacionesporcliente;
 
+-- No se como resolver esta consulta
 -- ====================================================================================
 
 
