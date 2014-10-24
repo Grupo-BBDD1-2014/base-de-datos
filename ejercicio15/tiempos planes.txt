@@ -1,4 +1,4 @@
-			antes	desp
+		antes	desp
 plan1 -> 	0.043	0.001
 plan2 -> 	0.025	0.001
 plan3 -> 	0.001	0.001
