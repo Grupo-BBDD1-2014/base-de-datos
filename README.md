@@ -1,6 +1,6 @@
 base-de-datos-grupo-37
 
-TP 4 - MySQL <-> BBDD1 <-> UNLP <-> 2014
+TP 4 - MySQL, BBDD1, UNLP, 2014.
 ======================
 
 A tener en cuenta: 
