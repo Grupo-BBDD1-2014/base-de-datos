@@ -496,9 +496,39 @@ call revision_repuesto(1009443,100, '2013-12-14 12:20:31' , 4 ,'4243-4255', 'Mai
 /*
 * 14) Validar mediante una consulta que la tabla REPARACIONESPORCLIENTE se este actualizando correctamente
 */
-select row_count() from reparacionesporcliente;
 
--- No se como resolver esta consulta
+select 
+    (cantR = cantidadReparaciones) as codigo
+from
+    reparacionesporcliente as r
+        right join
+    (select 
+        i.dniCliente, count(*) as cantR
+    from
+        reparacion as i
+    group by i.dniCliente) as s ON r.dniCliente = s.dniCliente
+group by codigo
+
+/*
+
+se intento Verificar que las inserciones actualizaron correctamente la tabla reparacionesporcliente.
+Se cuentan si la cantidad de reparaciones por cliente, en la tabla reparaciones, es la misma cantidad que 
+en la tabla reparacionesporcliente.
+
+Aqui el codigo puede tomar 3 valores: 
+NULL -> en el caso de que el dniCliente no se encuentre en la tablareparacionesporcliente
+0 -> en el caso que el  dniCliente se encuentre, pero la cantidad de reparaciones es distinta 
+1 -> en el caso que el dniCliente se encuentre, y la cantidad de reparaciones es la misma. 
+
+Aqui, agrupamos por codigo de error. Si los errores no aparecen, significa que no existen. 
+
+Entonces la solucion correcta deberia dar solo una row con un valor de 1. 
+Si se da que alguno de los valores es null o 0, la consulta no actualizaria correctamente ( o los datos son inconsistentes )
+
+Como algo anexo, se podria ademas de agrupar, contar la cantidad de veces que aparece dicho codigo
+
+*/
+
 -- ====================================================================================
 
 
