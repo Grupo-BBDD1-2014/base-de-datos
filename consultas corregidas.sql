@@ -4,7 +4,6 @@ consulta en ambas bases. ¿Qué diferencia nota?
 
 En conclusión, la base de datos desnormalizada tarda más, en promedio las consultas con la base normalizada tardan alrededor de 0.01/0.1 seg
 y las consultas en la base de datos desnormalizada tarda 0,03/0.7 seg (duration/fetch). 
-Lo otro que encontramos, y que lo demostramos agregando una columna màs en la tabla, es que los dni aparecen repetidos una gran cantidad de veces para la tabla denormalizada. Para la tabla normalizada, solo aparecen 1 vez. 
 */
 
 -- Desnormalizada
