@@ -3,23 +3,24 @@
 consulta en ambas bases. ¿Qué diferencia nota?
 
 En conclusión, la base de datos desnormalizada tarda más, en promedio las consultas con la base normalizada tardan alrededor de 0.01/0.1 seg
-y las consultas en la base de datos desnormalizada tarda 0,03/0.7 seg (duration/fetch). 
+y las consultas en la base de datos desnormalizada tarda 0,03/0.7 seg (duration/fetch).
+Esta diferencia en tiempos se debe a que la BD denormalizada posee mucha información repetida, quitando el distinct obtenemos alrededor de 160.000 
+registros, contra 20.000 que son la respuesta correcta. 
+
 */
 
 -- Desnormalizada
 -- corregido
-SELECT dniCliente, nombreApellidoCliente 
-FROM reparacion_dn.reparacion 
--- group by dniCliente no necesario 
-order by dniCliente asc;
+	SELECT distinct dniCliente, nombreApellidoCliente 
+	FROM reparacion_dn.reparacion 
+	order by dniCliente asc;
 
 -- =========================================================================
 -- Normalizada 
 -- corregido
-SELECT dniCliente, nombreApellidoCliente 
-FROM reparacion.cliente 
-group by dniCliente
-order by dniCliente asc;
+	SELECT distinct dniCliente, nombreApellidoCliente 
+	FROM reparacion.cliente 
+	order by dniCliente asc;
 
 -- =========================================================================
 
