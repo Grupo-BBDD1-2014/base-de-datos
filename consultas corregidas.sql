@@ -31,7 +31,7 @@ registros, contra 20.000 que son la respuesta correcta.
 *
 */
 
--- Desnormalizada
+-- desnormalizadaa
 
 select dniCliente, nombreApellidoCliente
 from reparacion_dn.reparacion as R
@@ -113,7 +113,7 @@ create VIEW `sucursalesporcliente` AS
         `c`.`ciudadCliente` AS `ciudadCliente`
     from
         (`clientevista` `c`
-        left join `sucursalvista` `s` ON ((`c`.`ciudadCliente` = `s`.`ciudadSucursal`)))
+        inner join `sucursalvista` `s` ON ((`c`.`ciudadCliente` = `s`.`ciudadSucursal`)))
 
 -- =========================================================================
 -- Normalizada 
@@ -126,12 +126,8 @@ create VIEW `reparacion`.`sucursalesporcliente` AS
         (`reparacion`.`cliente`
         inner join `reparacion`.`sucursal` 
 		ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
-
--- Usamos un left join para que muestre a los clientes que no tienen sucursales con  un NULL.
-/* Nos parecio mejor mostrar todos los clientes con sus sucursales, 
-*y de alguna manera notar que hay clientes sin sucursales en su ciudad
  
- se cambio de left join a inner join en line 127*/
+/* se cambio de left join a inner join en line 127*/
 -- =========================================================================
 /*
 * 5) En la base normalizada, hallar los clientes que dejaron vehículos a reparar en todas las sucursales de la ciudad en la que viven
