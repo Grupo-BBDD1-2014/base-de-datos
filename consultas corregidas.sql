@@ -86,6 +86,7 @@ order by dniCliente asc
 * Realizamos 3 vistas, aunque esto trae como problema que esas 2 vistas creadas, pueden ser
 * utilizadas por un usuario por ejemplo, cuando no deberia ser asi. 
 * Las 3 vistas se realizaron porque en una vista no se pueden hacer subconsultas en la clausula FROM.
+* Cuando entregamos la primera vez, agregamos left join, en vez de inner join.
 * 
 */
 
@@ -153,7 +154,7 @@ where not exists
 		and	r1.codSucursal = s.codSucursal
 	)
 )
--- habria qeu cambiar el right join a inner join???el resultado es 353
+-- el resultado es 353
 -- =========================================================================
 -- b. Realice la consulta utilizando la vista creada en el ej 4.
 
@@ -220,7 +221,7 @@ group by C.dniCliente
 */
 
 -- Denormalizada
-
+-- Corregida
 select dniCliente, codSucursal, fechaInicioReparacion, count(*) as cantRepuestos
 from 
 (	select r1.dniCliente, r1.fechaInicioReparacion, repuestoReparacion, codSucursal
@@ -233,7 +234,7 @@ having cantRepuestos > 3
 
 -- =========================================================================
 -- Normalizada
-
+-- corregida
 select R.dniCliente, R.codSucursal, R.fechaInicioReparacion,count(*) as cantRepuestos
 from  reparacion.reparacion as R inner join reparacion.repuestoreparacion as RP on RP.dniCliente = R.dniCliente
 where RP.fechaInicioReparacion = R.fechaInicioReparacion
