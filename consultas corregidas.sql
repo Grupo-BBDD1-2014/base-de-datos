@@ -128,7 +128,6 @@ create VIEW `reparacion`.`sucursalesporcliente` AS
         inner join `reparacion`.`sucursal` 
 		ON ((`reparacion`.`cliente`.`ciudadCliente` = `reparacion`.`sucursal`.`ciudadSucursal`)))
  
-/* se cambio de left join a inner join en line 127*/
 -- =========================================================================
 /*
 * 5) En la base normalizada, hallar los clientes que dejaron vehículos a reparar en todas las sucursales de la ciudad en la que viven
