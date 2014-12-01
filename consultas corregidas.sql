@@ -141,12 +141,12 @@ create VIEW `reparacion`.`sucursalesporcliente` AS
 select distinct c.dniCliente,  c.nombreApellidoCliente 
 from cliente as c inner join sucursal as s 
 on s.ciudadSucursal = c.ciudadCliente
-where NOT EXISTS
+where not exists
 (
     select *
     from sucursal as s1
     where c.ciudadCliente = s1.ciudadSucursal
-    and NOT EXISTS
+    and not exists
 	(
 		select * 
 		from reparacion as r
