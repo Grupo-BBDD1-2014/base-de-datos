@@ -139,42 +139,38 @@ create VIEW `reparacion`.`sucursalesporcliente` AS
 
 -- a. Realice la consulta sin utilizar la vista creada en el ej 4.
 
-select distinct r.dniCliente
-from reparacion.reparacion as r
-where not exists 
+select distinct c.dniCliente,  c.nombreApellidoCliente 
+from cliente as c inner join sucursal as s 
+on s.ciudadSucursal = c.ciudadCliente
+where NOT EXISTS
 (
-	select s.codSucursal
-	from reparacion.sucursal as s right join reparacion.cliente as c on s.ciudadSucursal = c.ciudadCliente
-	where r.dniCliente = c.dniCliente and not exists
+    select *
+    from sucursal as s1
+    where c.ciudadCliente = s1.ciudadSucursal
+    and NOT EXISTS
 	(
-		select r.codSucursal
-		from reparacion.reparacion as r1
-		where r1.dniCliente = r.dniCliente 
-		and r1.fechaInicioReparacion = r.fechaInicioReparacion 
-		and	r1.codSucursal = s.codSucursal
+		select * 
+		from reparacion as r
+		where r.dniCliente = c.dniCliente and r.codSucursal = s1.codSucursal 
 	)
 )
--- el resultado es 353
 -- =========================================================================
 -- b. Realice la consulta utilizando la vista creada en el ej 4.
 
-select distinct r.dniCliente
-from reparacion.reparacion as r
+select distinct c.dniCliente,  c.nombreApellidoCliente 
+from sucursalesporcliente as sc inner join cliente as c
+on c.dniCliente = sc.dniCliente
 where not exists
 (
-	select v.codSucursal
-	from reparacion.sucursalesporcliente as v
-	where r.dniCliente = v.dniCliente and not exists
+    select *
+    from sucursalesporcliente as sc1
+    where sc1.dniCliente = c.dniCliente and not exists
 	(
-		select r1.codSucursal
-		from reparacion.reparacion as r1
-		where r1.dniCliente = r.dniCliente
-		and r1.fechaInicioReparacion = r.fechaInicioReparacion 
-		and r1.codSucursal = v.codSucursal
+        select * 
+		from reparacion as r
+        where r.dniCliente = c.dniCliente and r.codSucursal = sc1.codSucursal
 	)
 )
--- No hay diferencia significante en tiempo, para ambas 342 row en 0.8 seg.
--- aca el resultado es 353!!! el cambio realizado de left a inner
 -- =========================================================================
 
 /*
